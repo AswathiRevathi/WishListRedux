@@ -74,7 +74,7 @@ if(size>0){
               <View style={{height:50,width:50,marginTop:10,marginRight:20}}>
                          {/* <Icon  name='ios-heart'  size={30} color="#D10202"  style={{margin:20}}/> */}
               <Icon name="ios-egg"  size={15} color="black" style={{position:'absolute',alignSelf:'flex-end'}}></Icon>
-             <Icon name="ios-add"   onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
+             <Icon name="ios-heart"   onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
             
                 </View>
             
@@ -91,7 +91,7 @@ if(size>0){
 
 
                          
-             <Icon name="ios-add"    onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
+             <Icon name="ios-heart"    onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
             
                 </View>
             

@@ -1,6 +1,6 @@
 
 import React ,{Component}from 'react';
-import { View, Text, StyleSheet, TouchableOpacity ,Button,Image,TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity ,Button,Image,TextInput,TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class ListItem extends Component{
@@ -87,7 +87,7 @@ if(this.state.present=='false'){
 }
 else{
   textItem=(
-    <View>
+    <View  style={{width:'60%'}}>
   <TextInput style = {{height:40,width:120,borderColor:'#ddd',borderWidth:1}}
    underlineColorAndroid = "transparent"
    placeholder = "Student First Name"
@@ -97,12 +97,12 @@ else{
   onChangeText={ (text)=>this.setState({firstName:text})}
    value={this.state.firstName}
  />
- <TouchableOpacity onPress={()=>{this.props.onEditItem(),this._sendValue()}}>
+ <TouchableWithoutFeedback  onPress={()=>{this.props.onEditItem(),this._sendValue()}}>
 
  <View style={{height:30,width:100,backgroundColor:'#97CA36',alignSelf:'center',justifyContent:'center',alignItems:'center',borderRadius:7}}>
  <Text style={{justifyContent:'center',alignContent:'center',color:'#fff',fontWeight:'bold'}}>UPDATE</Text>
 
-</View></TouchableOpacity>
+</View></TouchableWithoutFeedback >
     </View>
 
  );
