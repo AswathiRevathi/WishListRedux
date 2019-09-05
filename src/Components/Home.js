@@ -28,7 +28,7 @@ import ListItem from './ListItem';
   constructor(props){
     super(props);
     this.state={
-      popUpVisible:false,productName:'',products:[],wishList:[],id:1,k:'',iconColor:'black',editItemName:'',editPopVisibility:false,editItemId:''
+      popUpVisible:false,productName:'',products:[],wishList:[],id:1,k:'',iconColor:'black',editItemName:'',editPopVisibility:false,editItemId:'',present:'false'
   }
   }
   componentWillMount() {
@@ -74,7 +74,7 @@ if(size>0){
               <View style={{height:50,width:50,marginTop:10,marginRight:20}}>
                          {/* <Icon  name='ios-heart'  size={30} color="#D10202"  style={{margin:20}}/> */}
               <Icon name="ios-egg"  size={15} color="black" style={{position:'absolute',alignSelf:'flex-end'}}></Icon>
-             <Icon name="ios-heart"   onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
+             <Icon name="ios-add"   onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
             
                 </View>
             
@@ -88,7 +88,10 @@ if(size>0){
         
               <View style={{height:50,width:50,marginTop:10,marginRight:20}}>
                          {/* <Icon  name='ios-heart'  size={30} color="#D10202"  style={{margin:20}}/> */}
-             <Icon name="ios-heart"   onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
+
+
+                         
+             <Icon name="ios-add"    onPress={() =>  navigation.navigate('WishListScreen')}   size={35} color="#D10202" style={{alignSelf:'flex-end',margin:4}} ></Icon>
             
                 </View>
             
@@ -143,24 +146,47 @@ _deleteItem=(id)=>{
   this.props.navigation.setParams({title:'to wish list',wishList:this.props.wishList});
 }
 _editItem=(id)=>{
-  console.log("ITEM TO BE EDITED",id)
-this.setState({editPopVisibility:true,editItemId:id})
+  console.log("*****ID ITEM TO BE EDITED",id)
+this.setState({editItemId:id},()=>{
+  console.log("CHANGED ID",this.state.editItemId)
+})
+}
+callbackFunction = (childData) => {
+  // this.setState({message: childData})
+  console.log("INSIDE CALLBACK FUNCTION**",childData);
+  this.setState({present:childData},()=>{
+    console.log("updated")
+  })
+}
+databackFunction = (childData) => {
+  // this.setState({message: childData})
+  console.log("INSIDE databackFunction FUNCTION**",childData);
+  console.log("INSIDE databackFunction FUNCTION  IDID**",this.state.editItemId);
+
+  this.setState({editItemName:childData},()=>{
+    console.log("ITEM updated",this.state.editItemName)
+    this._editHandler();
+
+  })
+
+
 }
 _editHandler=()=>{
+  console.log("inside edit handler",this.state.editItemId,this.state.editItemName)
   
-  if(this.state.editItemName.trim() === '') {
-    alert('Enter product name')
-  }else{
-    console.log("ITEM TO BE EDITED",this.state.editItemId+"---Name"+this.state.editItemName)
+  // if(this.state.editItemName.trim() === '') {
+  //   alert('Enter product name')
+  // }else{
+  //   console.log("ITEM TO BE EDITED",this.state.editItemId+"---Name"+this.state.editItemName)
 
     this.props.editProduct(this.state.editItemId,this.state.editItemName);
     this.props.editWishListItem(this.state.editItemId,this.state.editItemName);
     // this.props.navigation.setParams({wishList:[]});
 
 
-    this.setState({editPopVisibility:false,editItemName:''})
+    // this.setState({editItemName:''})
 
-  }
+  // }
 }
 _addDataHandler = () => {
   console.log("inside add handele")
@@ -169,7 +195,7 @@ _addDataHandler = () => {
     if(this.state.productName.trim() === '') {
       alert('Enter product name')
     }else{
-      this.setState({id:this.state.id+1})
+      this.setState({id:this.state.id+1,editItemName:this.state.productName})
 
       console.log("ID IS",this.state.id)
       this.props.add(this.state.productName,this.state.id);
@@ -184,6 +210,7 @@ _addDataHandler = () => {
   render(){
 
     let productList=null;
+    console.log("---STATE---",this.state)
 
 console.log("---WISHLIST---",this.props.wishList)
     if(this.props.products.length==0){
@@ -209,13 +236,28 @@ productList=(
  data = { this.props.products}
  keyExtractor={(item, index) => index.toString()}
  renderItem = { info => (
+   
 <ListItem
+
 name={info.item.value}
 status={info.item.status}
 onAddWishList={()=>this._addToWishList(info.item.value,info.item.id,info.item.status)}
 onDeleteItem={()=>this._deleteItem(info.item.id)}
-
+parentCallback = {this.callbackFunction}
+upValue={this.databackFunction}
 onEditItem={()=>this._editItem(info.item.id)}
+show={this.state.present}
+onChangeTextValue={ (text) =>
+  //  this.setState({editItemName:text})
+
+    this.setState({
+      editItemName:text,
+}, ()=>{
+console.log("new edited item",this.state.editItemName);
+})
+  
+  }
+value={this.state.editItemName}
 />
  )}
  extraData={this.state}
