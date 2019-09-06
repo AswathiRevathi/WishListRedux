@@ -34,7 +34,7 @@ console.log("props in ListItem",this.props);
     //   this.props.upValue(this.state.firstName)
 
     // }
-        func=() =>{
+        func=() => {
 // let unSelect="#D5D4D4";
 // let select="#D10202";
 
@@ -73,7 +73,8 @@ console.log("status is",this.props.status)
     iconItem=(
     <Icon name="ios-heart" size={25} style={{margin:10,color:'#D10202' }} onPress= 
     {()=>{this.props.onAddWishList()}}>
-    </Icon>);
+    </Icon>
+    );
   }
 
   let textItem=null;
@@ -90,7 +91,7 @@ else{
     <View  style={{width:'60%'}}>
   <TextInput style = {{height:40,width:120,borderColor:'#ddd',borderWidth:1}}
    underlineColorAndroid = "transparent"
-   placeholder = "Student First Name"
+   placeholder = "Enter item"
    placeholderTextColor = "gray"
    autoCapitalize = "none"
   //  onChangeText = {(text)=>this.setState({firstName:text})}

@@ -234,6 +234,8 @@ productList=(
   
  <FlatList
  data = { this.props.products}
+ keyboardShouldPersistTaps="always"
+
  keyExtractor={(item, index) => index.toString()}
  renderItem = { info => (
    
