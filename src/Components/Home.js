@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,FlatList,TextInput,Image,Button,AsyncStorage} from 'react-native';
+import {View,Text,TouchableOpacity,FlatList,TextInput,Image,Button,AsyncStorage,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { connect } from 'react-redux';
 import {add_item} from '../../actions/wishlist';
@@ -28,15 +28,25 @@ import ListItem from './ListItem';
   constructor(props){
     super(props);
     this.state={
-      popUpVisible:false,productName:'',products:[],wishList:[],id:1,k:'',iconColor:'black',editItemName:'',editPopVisibility:false,editItemId:'',present:'false'
+      popUpVisible:false,productName:'',products:[],wishList:[],id:1,k:'',iconColor:'black',editItemName:'',editPopVisibility:false,editItemId:'',present:'false',toRender:''
   }
   }
   componentWillMount() {
     this.props.navigation.setParams({title:"AMMUI", header: false,wishList:this.props.wishList});
   }
-  
+
+componentWillReceiveProps (newProps) {
+  console.log("WILL RECEIVE PROPS   HOME ",newProps)
+
+  console.log("WILL RECEIVE PROPS HOME newProps show",newProps)
+
+}
   componentDidUpdate(prevProps) {
     //    Typical usage (don't forget to compare props):
+
+
+    console.log("-------------inside COMPONENT DIDUPDATE HOME-----------------")
+
           if (this.props.wishList !== prevProps.wishList) {
             this._sendingNavParams();
           }
@@ -44,13 +54,62 @@ import ListItem from './ListItem';
 
  
   _sendingNavParams=()=>{
-    console.log("INSIDE _sendingNavParams");
+    // console.log("INSIDE _sendingNavParams");
     this.props.navigation.setParams({title:'to wish list',wishList:this.props.wishList});
 
   }
 
+  onClick=()=>{
+    console.log("CURRENT STATE",this.state.present);
+    this.child.method(this.state.present);
+    console.log("clicked on view","88",);
+    // if(this.state.toRender=='true'){
+
+    //   console.log("INSIDE TORENDER CLICK EVENT")
+
+    //   this.setState({
+    //         present:'false'},()=>
+    //         {
+    //           console.log("INSIDE OUTSIDE CLICK EVENT")
+    //           // this.props.navigation.setParams({show:'true'});
+      
+    //         }
+    //       );
+    // }
+    // if(this.state.toRender=='true'){
+    //   this.setState({
+    //     present:'true'},()=>
+    //     {
+    //       console.log("INSIDE ON @@@@@CLICK")
+    //       // this.props.navigation.setParams({show:'true'});
+  
+    //     }
+    //   );
+    // }
+   
+  }
+
 componentDidMount(){
-    
+    console.log("-------------INSIDE COMPONENET DIDMOUNT HOME-----------------")
+
+    this.props.navigation.addListener("didFocus", () => {
+      // user has navigated to this screen
+
+      console.log("----INSIDE COMPONENT DIDMOUNT DIDFOCUS",this.state)
+
+
+
+
+      
+  });
+
+  this.props.navigation.addListener("didBlur", () => {
+      // user has navigated away from this screen
+      console.log("----INSIDE COMPONENT DIDMOUNT DIDBLUR")
+
+  });
+
+
   this.setState({
     k:this.props.wishList.length
   })
@@ -154,9 +213,13 @@ this.setState({editItemId:id},()=>{
 callbackFunction = (childData) => {
   // this.setState({message: childData})
   console.log("INSIDE CALLBACK FUNCTION**",childData);
-  this.setState({present:childData},()=>{
-    console.log("updated")
-  })
+  if(childData=='true'){
+    this.setState({present:'true'},()=>{
+      console.log("INSIDE CALLBACK FUNCTION TRUE",this.state);
+    })
+  }
+ 
+ 
 }
 databackFunction = (childData) => {
   // this.setState({message: childData})
@@ -210,9 +273,9 @@ _addDataHandler = () => {
   render(){
 
     let productList=null;
-    console.log("---STATE---",this.state)
+    console.log("--INSIDE RENDER-STATE---",this.state)
 
-console.log("---WISHLIST---",this.props.wishList)
+console.log("--INSIDE RENDER-WISHLIST---",this.props.wishList)
     if(this.props.products.length==0){
       productList=(
 
@@ -233,6 +296,7 @@ console.log("---WISHLIST---",this.props.wishList)
 productList=(
   
  <FlatList
+
  data = { this.props.products}
  keyboardShouldPersistTaps="always"
 
@@ -240,7 +304,7 @@ productList=(
  renderItem = { info => (
    
 <ListItem
-
+onRef={ref => (this.child = ref)}
 name={info.item.value}
 status={info.item.status}
 onAddWishList={()=>this._addToWishList(info.item.value,info.item.id,info.item.status)}
@@ -268,6 +332,8 @@ value={this.state.editItemName}
     }
 
     return(
+      <TouchableWithoutFeedback onPress = { this.onClick }>
+
       <View style={{flex:1}}>
 
 {productList}
@@ -357,6 +423,7 @@ value={this.state.editItemName}
    <Icon  name='ios-heart'  size={50} color="#97CA36" />
 </TouchableOpacity> */}
 </View>
+</TouchableWithoutFeedback>
     );
   }
 }
